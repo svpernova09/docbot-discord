@@ -1,0 +1,54 @@
+name: "Docbot Discord CI/CD"
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.0']
+    name: PHP ${{ matrix.php }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v1
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@2.9.0
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, imagick
+          coverage: none
+
+      - name: Report PHP version
+        run: cp .env.example .env
+
+      - name: Install dependencies & Setup App
+        run: |
+          composer install
+
+      - name: Execute tests
+        run: vendor/bin/phpunit
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+
+      - name: Cat Log
+        run: cat storage/logs/laravel.log
+        if: ${{ failure() }}
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+        if: github.ref == 'refs/heads/master'
+
+      - name: Deploy
+        run: vendor/bin/envoy run deploy
+        if: github.ref == 'refs/heads/master'
