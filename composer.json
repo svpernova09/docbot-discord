@@ -1,6 +1,6 @@
 {
   "name": "svpernova09/docbot-discord",
-  "description": "Bot to provide Discord Slash Commands",
+  "description": "Basic Laravel Documentation Response Bot",
   "license": "MIT",
   "type": "project",
   "authors": [
