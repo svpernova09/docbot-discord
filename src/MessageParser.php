@@ -99,7 +99,7 @@ class MessageParser {
 
         if(in_array($query, $this->docs)){
 
-            return "https://laravel.com/docs/$query";
+            return "<https://laravel.com/docs/$query>";
         }
 
         return false;
