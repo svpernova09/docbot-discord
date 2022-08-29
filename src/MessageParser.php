@@ -94,7 +94,7 @@ class MessageParser {
 
     public function __invoke($message)
     {
-        $content = $message->content;
+        $content = strtolower($message->content);
         // Grab the first 4 chars for our trigger
         $trigger = substr($content, 0, 4);
         // Grab everything after the first 5 chars

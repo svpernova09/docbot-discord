@@ -36,6 +36,7 @@ class messageParserTest extends TestCase
             ["bad input", false],
             ["homestead", false],
             ["docs pageDoesn'tExist", false],
+            ["dOcS ArTiSan", "<https://laravel.com/docs/artisan>"],
             ["docs artisan", "<https://laravel.com/docs/artisan>"],
             ["docs authentication", "<https://laravel.com/docs/authentication>"],
             ["docs authorization", "<https://laravel.com/docs/authorization>"],
