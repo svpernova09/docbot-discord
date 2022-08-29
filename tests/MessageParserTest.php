@@ -30,6 +30,8 @@ class messageParserTest extends TestCase
     public function messageInputProvider()
     {
         return [
+            ["a  a helpers", false],
+            ["help helpers", false],
             ["bad input", false],
             ["homestead", false],
             ["docs pageDoesn'tExist", false],
