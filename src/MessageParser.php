@@ -94,12 +94,18 @@ class MessageParser {
 
     public function __invoke($message)
     {
-        // cheap hack to force `docs ` input
-        $query = substr($message->content, 5);
+        $content = $message->content;
+        // Grab the first 4 chars for our trigger
+        $trigger = substr($content, 0, 4);
+        // Grab everything after the first 5 chars
+        $query = substr($content, 5);
 
-        if(in_array($query, $this->docs)){
+        if($trigger === "docs")
+        {
+            if(in_array($query, $this->docs)){
 
-            return "<https://laravel.com/docs/$query>";
+                return "<https://laravel.com/docs/$query>";
+            }
         }
 
         return false;
