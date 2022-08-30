@@ -96,11 +96,11 @@ class MessageParser {
     {
         $content = strtolower($message->content);
         // Grab the first 4 chars for our trigger
-        $trigger = substr($content, 0, 4);
+        $trigger = substr($content, 0, 5);
         // Grab everything after the first 5 chars
         $query = substr($content, 5);
 
-        if($trigger === "docs")
+        if($trigger === "docs ")
         {
             if(in_array($query, $this->docs)){
 
