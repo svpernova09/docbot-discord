@@ -30,6 +30,7 @@ class messageParserTest extends TestCase
     public function messageInputProvider()
     {
         return [
+            ["docsaurls", false],
             ["docs", false],
             ["a  a helpers", false],
             ["help helpers", false],
