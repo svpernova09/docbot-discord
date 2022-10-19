@@ -27,6 +27,68 @@ class messageParserTest extends TestCase
         );
     }
 
+    public function testMessageParserDoesNotFailIfGuildIdIsNotSet()
+    {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = 'foo_bar'; // must be missing
+
+        $this->assertNull($parser($message));
+    }
+
+    public function testMessageParserDoesNotFailIfGuildIdIsNull()
+    {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = 'foo_bar'; // must be missing
+        $message->guild_id = null;
+
+        $this->assertNull($parser($message));
+    }
+
+    public function testMessageParserDoesNotFailIfGuildIdIsUnknown()
+    {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = 'foo_bar'; // must be missing
+        $message->guild_id = '123';
+
+        $this->assertNull($parser($message));
+    }
+
+    /**
+     * @dataProvider guildSpecificMessage
+     */
+    public function testMessageParserReturnsResponseWhenGuildIdAndQueryMatch(
+        string $guidId, string $content, string $expected
+    ) {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = $content;
+        $message->guild_id = $guidId;
+
+        $this->assertEquals(
+            $expected,
+            $parser($message)
+        );
+    }
+
+    /**
+     * @dataProvider guildSpecificMessage
+     */
+    public function testMessageParserReturnsNullIfContentDoesNotMatch(
+        string $guidId, string $content, string $expected
+    ) {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = 'foo_bar';
+        $message->guild_id = $guidId;
+
+        $this->assertNull(
+            $parser($message)
+        );
+    }
+
     public function messageInputProvider()
     {
         return [
@@ -125,6 +187,14 @@ class messageParserTest extends TestCase
             ["docs verification", "<https://laravel.com/docs/verification>"],
             ["docs views", "<https://laravel.com/docs/views>"],
             ["docs vite", "<https://laravel.com/docs/vite>"],
+        ];
+    }
+
+    public function guildSpecificMessage(): array
+    {
+        return [
+            ['235102104509743106', 'exit-vim', "`:q`"],
+            ['235102104509743106', 'ben', "**BEST PHP RELEASE MANAGER EVER**"],
         ];
     }
 }
