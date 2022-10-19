@@ -31,29 +31,29 @@ class messageParserTest extends TestCase
     {
         $parser = new MessageParser();
         $message = new \stdClass();
-        $message->content = 'foo_bar'; // must be missing
+        $message->content = 'docs foo_bar'; // must be missing
 
-        $this->assertNull($parser($message));
+        $this->assertFalse($parser($message));
     }
 
     public function testMessageParserDoesNotFailIfGuildIdIsNull()
     {
         $parser = new MessageParser();
         $message = new \stdClass();
-        $message->content = 'foo_bar'; // must be missing
+        $message->content = 'docs foo_bar'; // must be missing
         $message->guild_id = null;
 
-        $this->assertNull($parser($message));
+        $this->assertFalse($parser($message));
     }
 
     public function testMessageParserDoesNotFailIfGuildIdIsUnknown()
     {
         $parser = new MessageParser();
         $message = new \stdClass();
-        $message->content = 'foo_bar'; // must be missing
+        $message->content = 'docs foo_bar'; // must be missing
         $message->guild_id = '123';
 
-        $this->assertNull($parser($message));
+        $this->assertFalse($parser($message));
     }
 
     /**
@@ -81,10 +81,10 @@ class messageParserTest extends TestCase
     ) {
         $parser = new MessageParser();
         $message = new \stdClass();
-        $message->content = 'foo_bar';
+        $message->content = 'docs foo_bar';
         $message->guild_id = $guidId;
 
-        $this->assertNull(
+        $this->assertFalse(
             $parser($message)
         );
     }
@@ -193,8 +193,8 @@ class messageParserTest extends TestCase
     public function guildSpecificMessage(): array
     {
         return [
-            ['235102104509743106', 'exit-vim', "`:q`"],
-            ['235102104509743106', 'ben', "**BEST PHP RELEASE MANAGER EVER**"],
+            ['235102104509743106', 'docs exit-vim', "`:q`"],
+            ['235102104509743106', 'docs ben', "**BEST PHP RELEASE MANAGER EVER**"],
         ];
     }
 }
