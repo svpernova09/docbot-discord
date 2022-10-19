@@ -91,6 +91,11 @@ class MessageParser {
                 "views",
                 "vite",
             ];
+    
+        protected $notDocs = [
+            "exit-vim" => "`:q`",
+            "ben" => "**BEST PHP RELEASE MANAGER EVER**",
+        ];
 
     public function __invoke($message)
     {
@@ -105,6 +110,10 @@ class MessageParser {
             if(in_array($query, $this->docs)){
 
                 return "<https://laravel.com/docs/$query>";
+            }
+            
+            if(in_array($query, $this->notDocs)) {
+                return $this->notDocs[$query];
             }
         }
 
