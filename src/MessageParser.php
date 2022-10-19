@@ -93,8 +93,11 @@ class MessageParser {
             ];
     
         protected $notDocs = [
-            "exit-vim" => "`:q`",
-            "ben" => "**BEST PHP RELEASE MANAGER EVER**",
+            // phpugly
+            "235102104509743106" => [
+                "exit-vim" => "`:q`",
+                "ben" => "**BEST PHP RELEASE MANAGER EVER**",
+            ],
         ];
 
     public function __invoke($message)
@@ -112,9 +115,16 @@ class MessageParser {
                 return "<https://laravel.com/docs/$query>";
             }
             
-            if(in_array($query, $this->notDocs)) {
-                return $this->notDocs[$query];
-            }
+            try {
+                if(null !== $message->guild_id ) {
+                    $guildId = (string) $message->guild_id;
+                    if(isset($this->notDocs[$guildId])
+                        && isset($this->notDocs[$guildId][$query]))
+                    {
+                        return $this->notDocs[$guildId][$query];
+                    }
+                }
+            } catch (\Throwable $t) {}
         }
 
         return false;
