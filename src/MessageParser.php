@@ -91,6 +91,14 @@ class MessageParser {
                 "views",
                 "vite",
             ];
+    
+        protected $notDocs = [
+            // phpugly
+            "235102104509743106" => [
+                "exit-vim" => "`:q`",
+                "ben" => "**BEST PHP RELEASE MANAGER EVER**",
+            ],
+        ];
 
     protected $versions = [
                 "9.x",
@@ -128,6 +136,17 @@ class MessageParser {
 
                 return "<https://laravel.com/docs/$query>";
             }
+            
+            try {
+                if(null !== $message->guild_id ) {
+                    $guildId = (string) $message->guild_id;
+                    if(isset($this->notDocs[$guildId])
+                        && isset($this->notDocs[$guildId][$query]))
+                    {
+                        return $this->notDocs[$guildId][$query];
+                    }
+                }
+            } catch (\Throwable $t) {}
         }
 
         return false;

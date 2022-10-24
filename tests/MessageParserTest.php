@@ -27,6 +27,68 @@ class messageParserTest extends TestCase
         );
     }
 
+    public function testMessageParserDoesNotFailIfGuildIdIsNotSet()
+    {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = 'docs foo_bar'; // must be missing
+
+        $this->assertFalse($parser($message));
+    }
+
+    public function testMessageParserDoesNotFailIfGuildIdIsNull()
+    {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = 'docs foo_bar'; // must be missing
+        $message->guild_id = null;
+
+        $this->assertFalse($parser($message));
+    }
+
+    public function testMessageParserDoesNotFailIfGuildIdIsUnknown()
+    {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = 'docs foo_bar'; // must be missing
+        $message->guild_id = '123';
+
+        $this->assertFalse($parser($message));
+    }
+
+    /**
+     * @dataProvider guildSpecificMessage
+     */
+    public function testMessageParserReturnsResponseWhenGuildIdAndQueryMatch(
+        string $guidId, string $content, string $expected
+    ) {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = $content;
+        $message->guild_id = $guidId;
+
+        $this->assertEquals(
+            $expected,
+            $parser($message)
+        );
+    }
+
+    /**
+     * @dataProvider guildSpecificMessage
+     */
+    public function testMessageParserReturnsNullIfContentDoesNotMatch(
+        string $guidId, string $content, string $expected
+    ) {
+        $parser = new MessageParser();
+        $message = new \stdClass();
+        $message->content = 'docs foo_bar';
+        $message->guild_id = $guidId;
+
+        $this->assertFalse(
+            $parser($message)
+        );
+    }
+
     public function messageInputProvider()
     {
         return [
@@ -131,6 +193,14 @@ class messageParserTest extends TestCase
             ["docs 5.4 csrf", "<https://laravel.com/docs/csrf>"],
             ["docs csrf 5.4", "<https://laravel.com/docs/csrf>"],
             ["docs csrf 9.x",  "<https://laravel.com/docs/9.x/csrf>"],
+        ];
+    }
+
+    public function guildSpecificMessage(): array
+    {
+        return [
+            ['235102104509743106', 'docs exit-vim', "`:q`"],
+            ['235102104509743106', 'docs ben', "**BEST PHP RELEASE MANAGER EVER**"],
         ];
     }
 }
