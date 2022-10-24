@@ -131,6 +131,10 @@ class messageParserTest extends TestCase
             ["docs 5.4 csrf", "<https://laravel.com/docs/csrf>"],
             ["docs csrf 5.4", "<https://laravel.com/docs/csrf>"],
             ["docs csrf 9.x",  "<https://laravel.com/docs/9.x/csrf>"],
+            ["docs preg_replace", "<https://php.net/preg_replace>"],
+            ["docs trim", "<https://php.net/trim>"],
+            ["docs strreplace", false],
+            ["docs str_replace", "<https://php.net/str_replace>"],
         ];
     }
 }
