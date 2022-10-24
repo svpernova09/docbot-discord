@@ -127,7 +127,9 @@ class messageParserTest extends TestCase
             ["docs vite", "<https://laravel.com/docs/vite>"],
             ["docs 9.x csrf", "<https://laravel.com/docs/9.x/csrf>"],
             ["docs 8.x csrf", "<https://laravel.com/docs/8.x/csrf>"],
-            ["docs 10.x csrf", false],
+            ["docs 10.x csrf", "<https://laravel.com/docs/csrf>"],
+            ["docs 5.4 csrf", "<https://laravel.com/docs/csrf>"],
+            ["docs csrf 5.4", "<https://laravel.com/docs/csrf>"],
             ["docs csrf 9.x",  "<https://laravel.com/docs/9.x/csrf>"],
         ];
     }

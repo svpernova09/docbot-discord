@@ -92,6 +92,13 @@ class MessageParser {
                 "vite",
             ];
 
+    protected $versions = [
+                "9.x",
+                "8.x",
+                "7.x",
+                "6.x",
+    ];
+
     public function __invoke($message)
     {
         $content = strtolower($message->content);
@@ -103,12 +110,12 @@ class MessageParser {
         $query = substr($content, 5);
 
         // Check if version is available in command
-        $pattern = '/\b([6-9]\.x)\b/'; // only match 6.x to 9.x
+        $pattern = '/\b([0-9]+\.([0-9]|[x])+)\b/';
         preg_match($pattern, $query, $matches);
 
         if ($matches) {
             $query = preg_replace($pattern, '', $query);
-            $version = $matches[0];
+            $version = in_array($matches[0], $this->versions) ? $matches[0] : null;
         }
 
         $query = trim($query);
