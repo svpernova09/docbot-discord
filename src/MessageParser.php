@@ -128,6 +128,10 @@ class MessageParser {
 
                 return "<https://laravel.com/docs/$query>";
             }
+
+            if (function_exists($query)) {
+                return "<https://php.net/$query>";
+            }
         }
 
         return false;
