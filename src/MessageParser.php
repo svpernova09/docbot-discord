@@ -105,16 +105,21 @@ class MessageParser {
         // Check if version is available in command
         $pattern = '/\b([6-9]\.x)\b/'; // only match 6.x to 9.x
         preg_match($pattern, $query, $matches);
-        if ($version = $matches[0] ?? "9.x") // default to 9.x if no version is given
+
+        if ($matches) {
             $query = preg_replace($pattern, '', $query);
+            $version = $matches[0];
+        }
 
         $query = trim($query);
 
         if($trigger === "docs ")
         {
             if(in_array($query, $this->docs)){
+                if (isset($version))
+                    return "<https://laravel.com/docs/$version/$query>";
 
-                return "<https://laravel.com/docs/$version/$query>";
+                return "<https://laravel.com/docs/$query>";
             }
         }
 
