@@ -7,8 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class docsCommandTest extends TestCase
 {
-    private $command = 'docs';
-
     /**
      * @param $content
      * @param $expected
@@ -20,15 +18,12 @@ class docsCommandTest extends TestCase
         $parser = new DocsCommand();
 
         $args = str_getcsv(strtolower($content), ' ');
-        $command = array_shift($args);
+        array_shift($args);
 
-        # Only test when its an actual command
-        if ($this->command == $command) {
-            $this->assertEquals(
-                $expected,
-                $parser->parse_message($args)
-            );
-        }
+        $this->assertEquals(
+            $expected,
+            $parser->parse_message($args)
+        );
     }
 
     public function docsCommandProvider(): array
