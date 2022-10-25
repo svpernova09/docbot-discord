@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class docsCommandTest extends TestCase
 {
+    private $command = 'docs';
 
     /**
      * @param $content
@@ -17,25 +18,22 @@ class docsCommandTest extends TestCase
     public function testMessageParserReturnsFalseOnBadInput($content, $expected)
     {
         $parser = new DocsCommand();
-        $message = new \stdClass();
-        $message->content = $content;
 
+        $args = str_getcsv(strtolower($content), ' ');
+        $command = array_shift($args);
 
-        $this->assertEquals(
-            $expected,
-            $parser->parse_message($message)
-        );
+        # Only test when its an actual command
+        if ($this->command == $command) {
+            $this->assertEquals(
+                $expected,
+                $parser->parse_message($args)
+            );
+        }
     }
 
-    public function docsCommandProvider()
+    public function docsCommandProvider(): array
     {
         return [
-            ["docsaurls", false],
-            ["docs", false],
-            ["a  a helpers", false],
-            ["help helpers", false],
-            ["bad input", false],
-            ["homestead", false],
             ["docs pageDoesn'tExist", false],
             ["dOcS ArTiSan", "<https://laravel.com/docs/artisan>"],
             ["docs artisan", "<https://laravel.com/docs/artisan>"],

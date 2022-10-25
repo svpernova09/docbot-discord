@@ -101,9 +101,9 @@ class DocsCommand
         "6.x",
     ];
 
-    public function handle($message): bool
+    public function handle($message, $args): bool
     {
-        $response = $this->parse_message($message);
+        $response = $this->parse_message($args);
 
         if ($response)
             $message->reply($response);
@@ -111,18 +111,13 @@ class DocsCommand
         return false;
     }
 
-    public function parse_message($message)
+    public function parse_message($args)
     {
-        $content = strtolower($message->content);
-
-        // Grab the first 4 chars for our trigger
-        $trigger = substr($content, 0, 5);
-
-        // Grab everything after the first 5 chars
-        $query = substr($content, 5);
+        // Join the params for the full query string
+        $query = join(" ", $args);
 
         // Check if version is available in command
-        $pattern = '/\b([0-9]+\.([0-9]|[x])+)\b/';
+        $pattern = '/\b([0-9]+\.([0-9]|x)+)\b/';
         preg_match($pattern, $query, $matches);
 
         if ($matches) {
@@ -132,18 +127,15 @@ class DocsCommand
 
         $query = trim($query);
 
-        if($trigger === "docs ")
-        {
-            if(in_array($query, $this->docs)){
-                if (isset($version))
-                    return "<https://laravel.com/docs/$version/$query>";
+        if(in_array($query, $this->docs)){
+            if (isset($version))
+                return "<https://laravel.com/docs/$version/$query>";
 
-                return "<https://laravel.com/docs/$query>";
-            }
+            return "<https://laravel.com/docs/$query>";
+        }
 
-            if (function_exists($query)) {
-                return "<https://php.net/$query>";
-            }
+        if (function_exists($query)) {
+            return "<https://php.net/$query>";
         }
 
         return false;
