@@ -23,6 +23,13 @@ $discord->on('ready', function (DiscordCommandClient $discord) {
 
     // Listen to messages for text-based reactions
     $discord->on('message', function(Message $message) {
+
+        // If message is from a bot
+        if ($message->author->bot) {
+            // Do nothing
+            return;
+        }
+
         if (strtolower($message->content) == 'good bot') {
             $message->react('😘');
         }
