@@ -2,32 +2,32 @@
 
 namespace Docbot\Tests;
 
-use Docbot\MessageParser;
+use Docbot\Commands\DocsCommand;
 use PHPUnit\Framework\TestCase;
 
-class messageParserTest extends TestCase
+class docsCommandTest extends TestCase
 {
 
     /**
      * @param $content
      * @param $expected
      * @return void
-     * @dataProvider messageInputProvider
+     * @dataProvider docsCommandProvider
      */
     public function testMessageParserReturnsFalseOnBadInput($content, $expected)
     {
-        $parser = new MessageParser();
+        $parser = new DocsCommand();
         $message = new \stdClass();
         $message->content = $content;
 
 
         $this->assertEquals(
             $expected,
-            $parser($message)
+            $parser->parse_message($message)
         );
     }
 
-    public function messageInputProvider()
+    public function docsCommandProvider()
     {
         return [
             ["docsaurls", false],

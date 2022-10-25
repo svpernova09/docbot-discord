@@ -2,32 +2,29 @@
 
 include __DIR__.'/../vendor/autoload.php';
 
-use Discord\Discord;
+use Discord\DiscordCommandClient;
 use Discord\Parts\Channel\Message;
-use Docbot\MessageParser;
+use Docbot\Commands\DocsCommand;
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
 
-$discord = new Discord([
-    'token' => getenv('DOCBOT_TOKEN'),
+$discord = new DiscordCommandClient([
+    'token' => $_ENV['BOT_TOKEN'],
+    'prefix' => false,
+    'caseInsensitiveCommands' => true,
 ]);
 
+// Register commands
+$discord->registerCommand('docs', fn($message) => (new DocsCommand)($message));
+
 // When the Bot is ready
-$discord->on('ready', function (Discord $discord) {
+$discord->on('ready', function (DiscordCommandClient $discord) {
 
-    // Listen for messages
-    $discord->on('message', function (Message $message, Discord $discord) {
-
-        // If message is from a bot
-        if ($message->author->bot) {
-            // Do nothing
-            return;
-        }
-
-        $parser = new MessageParser;
-        $result = $parser($message);
-
-        if ($result !== false){
-            $message->reply($result);
+    // Listen to messages for text-based reactions
+    $discord->on('message', function(Message $message) {
+        if (strtolower($message->content) == 'good bot') {
+            $message->react('😘');
         }
     });
 
