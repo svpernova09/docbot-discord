@@ -16,7 +16,8 @@ $discord = new DiscordCommandClient([
 ]);
 
 // Register commands
-$discord->registerCommand('docs', fn($message) => (new DocsCommand)($message));
+//$discord->registerCommand('docs', fn($message) => (new DocsCommand)($message));
+$discord->registerCommand('docs', [new DocsCommand, 'handle']);
 
 // When the Bot is ready
 $discord->on('ready', function (DiscordCommandClient $discord) {

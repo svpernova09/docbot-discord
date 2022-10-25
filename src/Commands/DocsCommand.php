@@ -101,7 +101,7 @@ class DocsCommand
         "6.x",
     ];
 
-    public function __invoke($message)
+    public function handle($message): bool
     {
         $response = $this->parse_message($message);
 
