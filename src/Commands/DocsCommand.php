@@ -114,7 +114,7 @@ class DocsCommand
     public function parse_message($args)
     {
         // Join the params for the full query string
-        $query = implode(" ", $args);
+        $query = strtolower(implode(" ", $args));
 
         // Check if version is available in command
         $pattern = '/\b(\d+\.(\d|x)+)\b/';
