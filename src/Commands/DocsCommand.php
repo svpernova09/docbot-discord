@@ -114,22 +114,23 @@ class DocsCommand
     public function parse_message($args)
     {
         // Join the params for the full query string
-        $query = join(" ", $args);
+        $query = implode(" ", $args);
 
         // Check if version is available in command
-        $pattern = '/\b([0-9]+\.([0-9]|x)+)\b/';
+        $pattern = '/\b(\d+\.(\d|x)+)\b/';
         preg_match($pattern, $query, $matches);
 
         if ($matches) {
             $query = preg_replace($pattern, '', $query);
-            $version = in_array($matches[0], $this->versions) ? $matches[0] : null;
+            $version = in_array($matches[0], $this->versions, true) ? $matches[0] : null;
         }
 
         $query = trim($query);
 
-        if(in_array($query, $this->docs)){
-            if (isset($version))
+        if(in_array($query, $this->docs, true)){
+            if (isset($version)) {
                 return "<https://laravel.com/docs/$version/$query>";
+            }
 
             return "<https://laravel.com/docs/$query>";
         }
