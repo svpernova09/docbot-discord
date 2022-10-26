@@ -2,40 +2,33 @@
 
 namespace Docbot\Tests;
 
-use Docbot\MessageParser;
+use Docbot\Commands\DocsCommand;
 use PHPUnit\Framework\TestCase;
 
-class messageParserTest extends TestCase
+class docsCommandTest extends TestCase
 {
-
     /**
      * @param $content
      * @param $expected
      * @return void
-     * @dataProvider messageInputProvider
+     * @dataProvider docsCommandProvider
      */
     public function testMessageParserReturnsFalseOnBadInput($content, $expected)
     {
-        $parser = new MessageParser();
-        $message = new \stdClass();
-        $message->content = $content;
+        $parser = new DocsCommand();
 
+        $args = str_getcsv(strtolower($content), ' ');
+        array_shift($args);
 
         $this->assertEquals(
             $expected,
-            $parser($message)
+            $parser->parse_message($args)
         );
     }
 
-    public function messageInputProvider()
+    public function docsCommandProvider(): array
     {
         return [
-            ["docsaurls", false],
-            ["docs", false],
-            ["a  a helpers", false],
-            ["help helpers", false],
-            ["bad input", false],
-            ["homestead", false],
             ["docs pageDoesn'tExist", false],
             ["dOcS ArTiSan", "<https://laravel.com/docs/artisan>"],
             ["docs artisan", "<https://laravel.com/docs/artisan>"],

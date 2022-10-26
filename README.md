@@ -5,7 +5,8 @@ A simple bot to return Laravel documentation URLs based on prompts such as `docs
 ## Running the bot
 
 * Clone the repo
-* Export your `DOCBOT_TOKEN`: `export DOCBOT_TOKEN="3.1415926535"`
+* Rename `.env.example` to `.env`
+* Add your bots token to `BOT_TOKEN` in `.env`
 * Run `make install`
 * Run the bot: `php bin/docbot.php`
 
