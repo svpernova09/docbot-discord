@@ -13,6 +13,7 @@ $discord = new DiscordCommandClient([
     'token' => $_ENV['BOT_TOKEN'],
     'prefix' => false,
     'caseInsensitiveCommands' => true,
+    'defaultHelpCommand' => false,
 ]);
 
 // Register commands
